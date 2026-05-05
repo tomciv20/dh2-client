@@ -1480,6 +1480,8 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 			if(BattleTeambuilderTable[this.mod].overrideMoveInfo[id].viable === false) return false;
 		}
 
+		if (BattleMoveSearch.ALWAYS_VIABLE_MOVES.includes(id)) return true;
+
 		if (dex.gen === 1) {
 			// Usually not useless for Gen 1
 			if ([
@@ -1722,6 +1724,75 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 	] as ID[] as readonly ID[];
 	static readonly GOOD_DOUBLES_MOVES = [
 		'allyswitch', 'bulldoze', 'coaching', 'electroweb', 'faketears', 'fling', 'followme', 'healpulse', 'helpinghand', 'junglehealing', 'lifedew', 'lunarblessing', 'muddywater', 'pollenpuff', 'psychup', 'ragepowder', 'safeguard', 'skillswap', 'snipeshot', 'wideguard',
+	] as ID[] as readonly ID[];
+	static readonly ALWAYS_VIABLE_MOVES = [
+		// Bug
+		'skittersmack', 'attackorder', 'healorder', 'bugbite', 'pinmissile', 'furycutter',
+		'infestation', 'pounce', 'steamroller', 'stringshot', 'silverwind', 'strugglebug', 'twineedle',
+		// Normal
+		'barrage', 'bind', 'wrap', 'chipaway', 'cometpunch', 'constrict', 'crushclaw', 'cut',
+		'dizzypunch', 'doublehit', 'doubleslap', 'eggbomb', 'falseswipe', 'feint', 'furyattack',
+		'furyswipes', 'gigaimpact', 'guillotine', 'headcharge', 'hornattack', 'hyperfang',
+		'megakick', 'megapunch', 'payday', 'pound', 'present', 'rage', 'rockclimb', 'scratch',
+		'skullbash', 'slam', 'slash', 'smellingsalts', 'spikecannon', 'stomp', 'strength',
+		'tailslap', 'takedown', 'visegrip', 'echoedvoice', 'razorwind', 'round', 'snore', 'trumpcard',
+		// Status
+		'camouflage', 'captivate', 'celebrate', 'confide', 'happyhour', 'harden', 'holdhands',
+		'mefirst', 'screech', 'sharpen', 'splash', 'tailwhip',
+		// Fire
+		'blazingtorque', 'burningjealousy', 'ember', 'firefang', 'blazekick', 'blueflare',
+		'firepunch', 'firespin', 'flameburst', 'flamewheel', 'lavaplume', 'sizzlyslide',
+		// Water
+		'aquaring', 'bouncybubble', 'bubblebeam', 'bubble', 'clamp', 'dive', 'muddywater',
+		'razorshell', 'octazooka', 'splishysplash', 'whirlpool', 'withdraw',
+		// Electric
+		'aurawheel', 'boltstrike', 'buzzybuzz', 'thunderfang', 'supercellslam',
+		'wildcharge', 'zippyzap', 'spark', 'overdrive',
+		// Grass
+		'absorb', 'branchpoke', 'drumbeating', 'leaftornado', 'leafage', 'ingrain',
+		'megadrain', 'petalblizzard', 'needlearm', 'seedbomb', 'snaptrap', 'sappyseed',
+		// Ice
+		'aurorabeam', 'freezeshock', 'freezyfrost', 'glaciallance', 'glaciate',
+		'iceburn', 'icefang', 'powdersnow',
+		// Fighting
+		'combattorque', 'doublekick', 'karatechop', 'rollingkick', 'skyuppercut',
+		'submission', 'triplekick', 'vitalthrow',
+		// Poison
+		'acid', 'belch', 'crosspoison', 'noxioustorque', 'poisonfang', 'poisonjab',
+		'poisonsting', 'poisontail', 'purify', 'smog', 'sludge', 'toxicthread',
+		// Ground
+		'bonerush', 'bonemerang', 'boneclub', 'dig', 'drillrun', 'landswrath',
+		'mudbomb', 'mudshot', 'rototiller', 'sandtomb', 'sandseerstorm', 'thousandwaves',
+		// Flying
+		'aeroblast', 'bleakwindstorm', 'bounce', 'chatter', 'dragonascent', 'drillpeck',
+		'floatyfall', 'fly', 'peck', 'wingattack',
+		// Psychic
+		'dreameater', 'glitzyglow', 'heartstamp', 'lusterpurge', 'meditate', 'mistball',
+		'photongeyser', 'psychoboost', 'psystrike', 'synchronoise', 'twinbeam', 'zenheadbutt',
+		// Rock
+		'diamondstorm', 'mightycleave', 'powergem', 'rockblast', 'rockthrow', 'rocktomb',
+		'smackdown', 'tarshot',
+		// Ghost
+		'astonish', 'astralbarrage', 'infernalparade', 'lastrespects', 'lick',
+		'moongeistbeam', 'ragefist', 'shadowclaw',
+		// Dragon
+		'coreenforcer', 'dragonclaw', 'dragonbreath', 'dynamaxcannon', 'eternabeam',
+		'twister', 'roaroftime', 'spacialrend',
+		// Dark
+		'baddybad', 'darkvoid', 'brutalswing', 'darkestlariat', 'hyperspacefury',
+		'feintattack', 'falsesurrender', 'nightdaze', 'suckerpunch', 'wickedtorque',
+		// Steel
+		'behemothbash', 'behemothblade', 'doubleironbash', 'geargrind', 'hardpress',
+		'irontail', 'magnetbomb', 'metalclaw', 'smartstrike', 'spinout', 'steelwing',
+		'sunsteelstrike', 'doomdesire', 'makeitrain', 'mirrorshot', 'tachyoncutter',
+		'metalsound', 'gearup', 'shelter',
+		// Fairy
+		'magicaltorque', 'disarmingvoice', 'fairywind', 'mistyexplosion', 'moonblast',
+		'naturesmadness', 'sparklyswirl', 'springtidestorm', 'aromaticmist', 'flowershield',
+		// Doubles moves (now always viable)
+		'allyswitch', 'bulldoze', 'coaching', 'electroweb', 'faketears', 'fling', 'followme',
+		'healpulse', 'helpinghand', 'junglehealing', 'lifedew', 'lunarblessing', 'muddywater',
+		'pollenpuff', 'psychup', 'ragepowder', 'safeguard', 'skillswap', 'snipeshot', 'wideguard',
 	] as ID[] as readonly ID[];
 	getBaseResults() {
 		if (!this.species) return this.getDefaultResults();
