@@ -537,7 +537,7 @@ const Dex = new class implements ModdedDex {
 		let spriteDir = 'sprites/';
 		let hasCustomSprite = false;
 		let modSpriteId = toID(modSpecies.spriteid);		
-		options.mod = this.getSpriteMod(options.mod, modSpriteId, isFront ? 'front' : 'back', modSpecies.exists);
+		options.mod = this.getSpriteMod(options.mod, modSpriteId, isFront ? 'front' : 'back', modSpecies.exists && modSpecies.isNonstandard !== 'Custom');
 		if (options.mod) {
 			resourcePrefix = (options.mod === 'custombase' ? 'data/mods/' : Dex.modResourcePrefix);
 			spriteDir = `${options.mod}/sprites/`;
@@ -807,7 +807,7 @@ const Dex = new class implements ModdedDex {
 		let fainted = ((pokemon as Pokemon | ServerPokemon)?.fainted ? `;opacity:.3;filter:grayscale(100%) brightness(.5)` : ``);
 		Dex.species.get(id);
 		let species = window.BattlePokedexAltForms && window.BattlePokedexAltForms[id] ? window.BattlePokedexAltForms[id] : Dex.species.get(id);
-		mod = this.getSpriteMod(mod, id, 'icons', species.exists !== false);
+		mod = this.getSpriteMod(mod, id, 'icons', species.exists !== false && species.isNonstandard !== 'Custom');
 		if (mod) return `background:transparent url(${mod === 'custombase' ? 'data/mods/' : this.modResourcePrefix}${mod}/sprites/icons/${id}.png) no-repeat scroll -0px -0px${fainted}`;
 		return `background:transparent url(${Dex.resourcePrefix}sprites/pokemonicons-sheet.png?v16) no-repeat scroll -${left}px -${top}px${fainted}`;
 
@@ -821,7 +821,7 @@ const Dex = new class implements ModdedDex {
 			spriteid = species.spriteid || toID(pokemon.species);
 		}
 		if (mod && window.ModConfig[mod].spriteGen) gen = window.ModConfig[mod].spriteGen;
-		mod = this.getSpriteMod(mod, id, 'front', species.exists !== false);
+		mod = this.getSpriteMod(mod, id, 'front', species.exists !== false && species.isNonstandard !== 'Custom');
 		if (mod) {
 			return {
 				spriteDir: `${mod}/sprites/front`,
