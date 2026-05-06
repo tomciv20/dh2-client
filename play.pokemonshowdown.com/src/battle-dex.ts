@@ -539,7 +539,7 @@ const Dex = new class implements ModdedDex {
 		let modSpriteId = toID(modSpecies.spriteid);		
 		options.mod = this.getSpriteMod(options.mod, modSpriteId, isFront ? 'front' : 'back', modSpecies.exists);
 		if (options.mod) {
-			resourcePrefix = Dex.modResourcePrefix;
+			resourcePrefix = (options.mod === 'custombase' ? 'data/mods/' : Dex.modResourcePrefix);
 			spriteDir = `${options.mod}/sprites/`;
 			hasCustomSprite = true;
 			if (this.getSpriteMod(options.mod, modSpriteId, (isFront ? 'front' : 'back') + '-shiny', modSpecies.exists) === '') options.shiny = false;
@@ -808,7 +808,7 @@ const Dex = new class implements ModdedDex {
 		Dex.species.get(id);
 		let species = window.BattlePokedexAltForms && window.BattlePokedexAltForms[id] ? window.BattlePokedexAltForms[id] : Dex.species.get(id);
 		mod = this.getSpriteMod(mod, id, 'icons', species.exists !== false);
-		if (mod) return `background:transparent url(${this.modResourcePrefix}${mod}/sprites/icons/${id}.png) no-repeat scroll -0px -0px${fainted}`;
+		if (mod) return `background:transparent url(${mod === 'custombase' ? 'data/mods/' : this.modResourcePrefix}${mod}/sprites/icons/${id}.png) no-repeat scroll -0px -0px${fainted}`;
 		return `background:transparent url(${Dex.resourcePrefix}sprites/pokemonicons-sheet.png?v16) no-repeat scroll -${left}px -${top}px${fainted}`;
 
 	}
@@ -885,7 +885,7 @@ const Dex = new class implements ModdedDex {
 		const data = this.getTeambuilderSpriteData(pokemon, gen, mod);
 		const shiny = (data.shiny ? '-shiny' : '');
 		let resourcePrefix = Dex.resourcePrefix;
-		if (data.spriteDir.includes('front')) resourcePrefix = Dex.modResourcePrefix;
+		if (data.spriteDir.includes('front')) resourcePrefix = (data.spriteDir.startsWith('custombase') ? 'data/mods/' : Dex.modResourcePrefix);
 		return 'background-image:url(' + resourcePrefix + data.spriteDir + shiny + '/' + data.spriteid + '.png);background-position:' + data.x + 'px ' + data.y + 'px;background-repeat:no-repeat';
 	}
 
