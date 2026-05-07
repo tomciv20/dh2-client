@@ -1111,11 +1111,17 @@ class BattleTooltips {
 		if (item === 'choiceband' && !clientPokemon?.volatiles['dynamax']) {
 			stats.atk = Math.floor(stats.atk * 1.5);
 		}
-		if (ability === 'purepower' || ability === 'hugepower') {
+		if (ability === 'hugepower') {
 			stats.atk *= 2;
 		}
-		if (ability === 'hustle' || (ability === 'gorillatactics' && !clientPokemon?.volatiles['dynamax'])) {
+		if (ability === 'purepower') {
+			stats.spa *= 2;
+		}
+		if (ability === 'hustle') {
 			stats.atk = Math.floor(stats.atk * 1.5);
+		}
+		if (ability === 'gorillatactics' && !clientPokemon?.volatiles['dynamax']) {
+			stats.atk = Math.floor(stats.atk * 1.3);
 		}
 		if (weather) {
 			if (this.battle.gen >= 4 && this.pokemonHasType(pokemon, 'Rock') && weather === 'sandstorm') {
@@ -1130,16 +1136,22 @@ class BattleTooltips {
 			if (ability === 'slushrush' && (weather === 'hail' || weather === 'snow')) {
 				speedModifiers.push(2);
 			}
+			if (ability === 'snowcloak' && (weather === 'hail' || weather === 'snow')) {
+				stats.spd = Math.floor(stats.spd * 1.5);
+			}
 			if (item !== 'utilityumbrella') {
 				if (weather === 'sunnyday' || weather === 'desolateland') {
-					if (ability === 'chlorophyll') {
+					if (ability === 'chlorophyll' || ability === 'asonespectrier') {
 						speedModifiers.push(2);
 					}
-					if (ability === 'solarpower') {
+					if (ability === 'solarpower' || ability === 'asonespectrier') {
 						stats.spa = Math.floor(stats.spa * 1.5);
 					}
 					if (ability === 'orichalcumpulse') {
 						stats.atk = Math.floor(stats.atk * 1.3333);
+					}
+					if (ability === 'magmaarmor') {
+						stats.spd = Math.floor(stats.spd * 1.5);
 					}
 					let allyActive = clientPokemon?.side.active;
 					if (allyActive) {
@@ -1157,12 +1169,22 @@ class BattleTooltips {
 					if (ability === 'swiftswim') {
 						speedModifiers.push(2);
 					}
+					if (ability === 'waterveil') {
+						stats.def = Math.floor(stats.def * 1.5);
+					}
+					if (ability === 'hydration') {
+						stats.spd = Math.floor(stats.spd * 1.5);
+					}
 				}
 			}
 		}
 		if (ability === 'defeatist' && serverPokemon.hp <= serverPokemon.maxhp / 2) {
 			stats.atk = Math.floor(stats.atk * 0.5);
 			stats.spa = Math.floor(stats.spa * 0.5);
+		}
+		if (clientPokemon?.volatiles['confusion'] && (ability === 'tangledfeet' || ability === 'asonedodrio')) {
+			stats.atk = Math.floor(stats.atk * 1.5);
+			speedModifiers.push(2);
 		}
 		if (clientPokemon) {
 			if (clientPokemon.volatiles['slowstart']) {
@@ -1217,6 +1239,12 @@ class BattleTooltips {
 		if (ability === 'marvelscale' && pokemon.status) {
 			stats.def = Math.floor(stats.def * 1.5);
 		}
+		if (ability === 'gooey') {
+			stats.def = Math.floor(stats.def * 1.2);
+		}
+		if (ability === 'heavymetal') {
+			stats.def = Math.floor(stats.def * 1.2);
+		}
 		const isNFE = this.battle.dex.species.get(serverPokemon.speciesForme).evos?.some(evo => {
 			const evoSpecies = this.battle.dex.species.get(evo);
 			return !evoSpecies.isNonstandard ||
@@ -1234,6 +1262,9 @@ class BattleTooltips {
 			} else {
 				stats.def = Math.floor(stats.def * 1.5);
 			}
+		}
+		if (ability === 'sweetveil' && this.battle.hasPseudoWeather('Misty Terrain')) {
+			stats.def = Math.floor(stats.def * 1.5);
 		}
 		if (this.battle.hasPseudoWeather('Electric Terrain')) {
 			if (ability === 'surgesurfer') {
@@ -1278,6 +1309,9 @@ class BattleTooltips {
 		}
 		if (item === 'ironball' || speedHalvingEVItems.includes(item)) {
 			speedModifiers.push(0.5);
+		}
+		if (ability === 'lightmetal' || ability === 'limber') {
+			speedModifiers.push(4506 / 4096);
 		}
 		if (ability === 'furcoat') {
 			stats.def *= 2;
@@ -1480,16 +1514,36 @@ class BattleTooltips {
 			if (value.itemModify(0)) moveType = item.naturalGift.type;
 		}
 		// Weather and pseudo-weather type changes.
-		if (move.id === 'weatherball' && value.weatherModify(0)) {
+		if (move.id === 'weatherball') {
 			switch (this.battle.weather) {
 			case 'sunnyday':
 			case 'desolateland':
-				if (item.id === 'utilityumbrella') break;
+				if (item.id !== 'utilityumbrella') moveType = 'Fire';
+				break;
+			case 'raindance':
+			case 'primordialsea':
+				if (item.id !== 'utilityumbrella') moveType = 'Water';
+				break;
+			case 'sandstorm':
+				moveType = 'Rock';
+				break;
+			case 'hail':
+			case 'snow':
+				moveType = 'Ice';
+				break;
+			case 'deltastream':
+				moveType = 'Flying';
+				break;
+			}
+		}
+		if (move.id === 'naturesmadness') {
+			switch (this.battle.weather) {
+			case 'sunnyday':
+			case 'desolateland':
 				moveType = 'Fire';
 				break;
 			case 'raindance':
 			case 'primordialsea':
-				if (item.id === 'utilityumbrella') break;
 				moveType = 'Water';
 				break;
 			case 'sandstorm':
@@ -1498,6 +1552,9 @@ class BattleTooltips {
 			case 'hail':
 			case 'snow':
 				moveType = 'Ice';
+				break;
+			case 'deltastream':
+				moveType = 'Flying';
 				break;
 			}
 		}
@@ -1819,12 +1876,30 @@ class BattleTooltips {
 			}
 		}
 		if (move.id === 'weatherball') {
-			if (this.battle.weather !== 'deltastream') {
+			if (this.battle.weather) {
 				value.weatherModify(2);
 			}
 		}
 		if (move.id === 'hydrosteam') {
 			value.weatherModify(1.5, 'Sunny Day');
+		}
+		if (move.id === 'naturesmadness' && this.battle.weather) {
+			value.weatherModify(2);
+		}
+		if (move.id === 'petalblizzard' && (this.battle.weather === 'hail' || this.battle.weather === 'snow')) {
+			value.set(135, 'Snow boost');
+		}
+		if ((move.id === 'floatyfall' || move.id === 'rockthrow') && this.battle.hasPseudoWeather('Gravity')) {
+			value.modify(2, 'Gravity');
+		}
+		if (move.id === 'mistball' && this.battle.hasPseudoWeather('Misty Terrain') && (target ? target.isGrounded() : true)) {
+			value.modify(2, 'Misty Terrain');
+		}
+		if (move.id === 'lick') {
+			const speciesId = toID(this.battle.dex.species.get(serverPokemon.speciesForme).baseSpecies);
+			if (['lickitung', 'lickilicky', 'gastly', 'haunter', 'gengar'].includes(speciesId)) {
+				value.modify(2, 'Species boost');
+			}
 		}
 		if (move.id === 'psyblade' && this.battle.hasPseudoWeather('Electric Terrain')) {
 			value.modify(1.5, 'Electric Terrain');
@@ -1933,10 +2008,10 @@ class BattleTooltips {
 
 		// Other ability boosts
 		if (pokemon.status === 'brn' && move.category === 'Special') {
-			value.abilityModify(1.5, "Flare Boost");
+			value.abilityModify(1.75, "Flare Boost");
 		}
 		if (move.flags['punch']) {
-			value.abilityModify(1.2, 'Iron Fist');
+			value.abilityModify(1.3, 'Iron Fist');
 		}
 		if (move.flags['pulse']) {
 			value.abilityModify(1.5, "Mega Launcher");
@@ -1947,26 +2022,31 @@ class BattleTooltips {
 		if (value.value <= 60) {
 			value.abilityModify(1.5, "Technician");
 		}
-		if (['psn', 'tox'].includes(pokemon.status) && move.category === 'Physical') {
+		if (['psn', 'tox'].includes(pokemon.status)) {
 			value.abilityModify(1.5, "Toxic Boost");
 		}
 		if (['Rock', 'Ground', 'Steel'].includes(moveType) && this.battle.weather === 'sandstorm' && !this.battle.tier.includes("VaporeMons")) {
-			if (value.tryAbility("Sand Force")) value.weatherModify(1.3, "Sandstorm", "Sand Force");
+			if (value.tryAbility("Sand Force")) value.weatherModify(1.5, "Sandstorm", "Sand Force");
 		}
 		if (this.battle.weather === 'sandstorm' && this.battle.tier.includes("VaporeMons")) {
-			if (value.tryAbility("Sand Force")) value.weatherModify(1.3, "Sandstorm", "Sand Force");
+			if (value.tryAbility("Sand Force")) value.weatherModify(1.5, "Sandstorm", "Sand Force");
 		}
 		if (move.secondaries) {
 			value.abilityModify(1.3, "Sheer Force");
 		}
 		if (move.flags['contact']) {
 			value.abilityModify(1.3, "Tough Claws");
+			if (!serverPokemon.item) value.abilityModify(1.2, "Pickpocket");
 		}
 		if (move.flags['sound']) {
 			value.abilityModify(1.3, "Punk Rock");
 		}
 		if (move.flags['slicing']) {
 			value.abilityModify(1.5, "Sharpness");
+			value.abilityModify(1.2, "Hyper Cutter");
+		}
+		if (move.flags['bullet']) {
+			value.abilityModify(1.3, "Ball Fetch");
 		}
 		for (let i = 1; i <= 5 && i <= pokemon.side.faintCounter; i++) {
 			if (pokemon.volatiles[`fallen${i}`]) {
@@ -1975,9 +2055,9 @@ class BattleTooltips {
 		}
 		if (target) {
 			if (["MF", "FM"].includes(pokemon.gender + target.gender)) {
-				value.abilityModify(0.75, "Rivalry");
+				value.abilityModify(0.8, "Rivalry");
 			} else if (["MM", "FF"].includes(pokemon.gender + target.gender)) {
-				value.abilityModify(1.25, "Rivalry");
+				value.abilityModify(1.6, "Rivalry");
 			}
 		}
 		const noTypeOverride = [
@@ -1995,7 +2075,7 @@ class BattleTooltips {
 				value.abilityModify(this.battle.gen > 6 ? 1.2 : 1.3, "Refrigerate");
 			}
 			if (this.battle.gen > 6) {
-				value.abilityModify(1.2, "Normalize");
+				value.abilityModify(1.5, "Normalize");
 			}
 		}
 		if (move.recoil || move.hasCrashDamage) {
@@ -2108,12 +2188,13 @@ class BattleTooltips {
 		return value;
 	}
 
-	static incenseTypes: {[itemName: string]: TypeName} = {
-		'Odd Incense': 'Psychic',
-		'Rock Incense': 'Rock',
-		'Rose Incense': 'Grass',
-		'Sea Incense': 'Water',
-		'Wave Incense': 'Water',
+	static incenseTypes: {[itemName: string]: TypeName[]} = {
+		'Full Incense': ['Normal', 'Fighting', 'Poison'],
+		'Odd Incense': ['Psychic', 'Ghost', 'Dark'],
+		'Rock Incense': ['Rock', 'Ground', 'Steel'],
+		'Rose Incense': ['Grass', 'Bug', 'Fairy'],
+		'Sea Incense': ['Water', 'Ice', 'Dragon'],
+		'Wave Incense': ['Flying', 'Electric', 'Fire'],
 	};
 	static itemTypes: {[itemName: string]: TypeName} = {
 		'Black Belt': 'Fighting',
@@ -2171,13 +2252,13 @@ class BattleTooltips {
 
 		// Plates
 		if (item.onPlate === moveType && !item.zMove) {
-			value.itemModify(1.2);
+			value.itemModify(1.3);
 			return value;
 		}
 
 		// Incenses
-		if (BattleTooltips.incenseTypes[item.name] === moveType) {
-			value.itemModify(1.2);
+		if (BattleTooltips.incenseTypes[item.name]?.includes(moveType)) {
+			value.itemModify(1.15);
 			return value;
 		}
 
@@ -2215,9 +2296,11 @@ class BattleTooltips {
 		}
 
 		if (itemName === 'Muscle Band' && move.category === 'Physical' ||
-			itemName === 'Wise Glasses' && move.category === 'Special' ||
-			itemName === 'Punching Glove' && move.flags['punch'] && !this.battle.tier.includes("VaporeMons")) {
+			itemName === 'Wise Glasses' && move.category === 'Special') {
 			value.itemModify(1.1);
+		}
+		if (itemName === 'Punching Glove' && move.flags['punch'] && !this.battle.tier.includes("VaporeMons")) {
+			value.itemModify(1.2);
 		}
 		//Vaporemons
 		if (this.battle.tier.includes("VaporeMons")) {
