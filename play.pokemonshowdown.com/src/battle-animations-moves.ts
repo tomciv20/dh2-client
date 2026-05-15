@@ -20023,6 +20023,36 @@ export const BattleMoveAnims: AnimTable = {
 			}, 'decel', 'explode');
 		},
 	},
+	refine: {
+		anim(scene, [attacker]) {
+			scene.showEffect('wisp', {
+				x: attacker.x,
+				y: attacker.y,
+				z: attacker.z,
+				scale: 1,
+				opacity: 1,
+			}, {
+				x: attacker.x,
+				y: attacker.y + 130,
+				z: attacker.z,
+				opacity: 0,
+			}, 'accel');
+		},
+		residualAnim(scene, [attacker]) {
+			scene.showEffect('wisp', {
+				x: attacker.x,
+				y: attacker.y + 130,
+				z: attacker.z,
+				scale: 1,
+				opacity: 0,
+			}, {
+				x: attacker.x,
+				y: attacker.y,
+				z: attacker.z,
+				opacity: 1,
+			}, 'decel', 'explode');
+		},
+	},
 	stealthrock: {
 		anim(scene, [attacker, defender]) {
 			scene.showEffect('rock1', {
@@ -36070,6 +36100,7 @@ BattleMoveAnims['headlongrush'] = {
 };
 BattleMoveAnims['hyperdrill'] = {anim: BattleMoveAnims['drillrun'].anim};
 BattleMoveAnims['kowtowcleave'] = {anim: BattleMoveAnims['nightslash'].anim};
+BattleMoveAnims['excommunication'] = {anim: BattleMoveAnims['memento'].anim};
 BattleMoveAnims['lastrespects'] = {anim: BattleMoveAnims['memento'].anim};
 BattleMoveAnims['luminacrash'] = {anim: BattleMoveAnims['esperwing'].anim};
 BattleMoveAnims['lunarblessing'] = {anim: BattleMoveAnims['moonlight'].anim};
