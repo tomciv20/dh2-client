@@ -615,6 +615,7 @@ const BattlePokemonIconIndexes: {[id: string]: number} = {
 	ababo: 1512 + 71,
 	scattervein: 1512 + 72,
 	cresceidon: 1512 + 73,
+	moandkrill: 115,
 };
 
 const BattlePokemonIconIndexesLeft: {[id: string]: number} = {

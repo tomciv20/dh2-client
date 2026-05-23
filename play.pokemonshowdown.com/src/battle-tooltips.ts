@@ -1024,11 +1024,7 @@ class BattleTooltips {
 			if (this.battle.gen > 2 && ability === 'quickfeet') {
 				stats.spe = Math.floor(stats.spe * 1.5);
 			} else if (pokemon.status === 'par') {
-				if (this.battle.gen > 6) {
-					stats.spe = Math.floor(stats.spe * 0.5);
-				} else {
-					stats.spe = Math.floor(stats.spe * 0.25);
-				}
+				stats.spe = Math.floor(stats.spe * 0.5);
 			}
 		}
 
@@ -1239,9 +1235,7 @@ class BattleTooltips {
 		if (ability === 'marvelscale' && pokemon.status) {
 			stats.def = Math.floor(stats.def * 1.5);
 		}
-		if (ability === 'gooey') {
-			stats.def = Math.floor(stats.def * 1.2);
-		}
+
 		if (ability === 'heavymetal') {
 			stats.def = Math.floor(stats.def * 1.2);
 		}
@@ -1353,11 +1347,7 @@ class BattleTooltips {
 		stats.spe = stats.spe % 1 > 0.5 ? Math.ceil(stats.spe) : Math.floor(stats.spe);
 
 		if (pokemon.status === 'par' && ability !== 'quickfeet') {
-			if (this.battle.gen > 6) {
-				stats.spe = Math.floor(stats.spe * 0.5);
-			} else {
-				stats.spe = Math.floor(stats.spe * 0.25);
-			}
+			stats.spe = Math.floor(stats.spe * 0.5);
 		}
 
 		return stats;
