@@ -2241,8 +2241,12 @@ class BattleTooltips {
 			this.battle.dex.species.get(value.pokemon.volatiles.formechange[1]).baseSpecies : species.baseSpecies;
 
 		// Plates
-		if (item.onPlate === moveType && !item.zMove) {
-			value.itemModify(1.3);
+		if (item.onPlate && !item.zMove) {
+			if (item.onPlate === moveType) {
+				value.itemModify(5325 / 4096);
+			} else {
+				value.itemModify(2867 / 4096);
+			}
 			return value;
 		}
 
