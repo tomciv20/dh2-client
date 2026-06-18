@@ -1023,8 +1023,6 @@ class BattleTooltips {
 
 			if (this.battle.gen > 2 && ability === 'quickfeet') {
 				stats.spe = Math.floor(stats.spe * 1.5);
-			} else if (pokemon.status === 'par') {
-				stats.spe = Math.floor(stats.spe * 0.5);
 			}
 		}
 
