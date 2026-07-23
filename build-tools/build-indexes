@@ -1498,9 +1498,10 @@ function buildTeambuilderTables() {
 			BattleTeambuilderTable[modConfigId].overrideAbilityDesc = overrideAbilityDesc;
 			for (const id in modData.Abilities) {
 				const modEntry = modData.Abilities[id];
+				if (!modEntry) continue; // null entries remove/disable abilities in this mod
 				const baseEntry = Dex.data.Abilities[id];
 				const fakeAbility = (typeof baseEntry === 'undefined');
-				if (fakeAbility) fullAbilityName[id] = modData.Abilities[id].name;
+				if (fakeAbility) fullAbilityName[id] = modEntry.name;
 				if (fakeAbility || (modEntry.shortDesc || modEntry.desc) !== (baseEntry.shortDesc || baseEntry.desc)) {
 					overrideAbilityDesc[id] = (modEntry.shortDesc || modEntry.desc);
 				}
