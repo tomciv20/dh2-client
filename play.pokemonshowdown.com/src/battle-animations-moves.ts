@@ -36142,3 +36142,59 @@ BattleMoveAnims['trailblaze'] = {anim: BattleMoveAnims['powerwhip'].anim};
 BattleMoveAnims['tripledive'] = {anim: BattleMoveAnims['dive'].anim};
 BattleMoveAnims['hydrosteam'] = {anim: BattleMoveAnims['steameruption'].anim};
 BattleMoveAnims['psyblade'] = {anim: BattleMoveAnims['psychocut'].anim};
+BattleMoveAnims['merrychristmas'] = {
+	anim(scene, [attacker, defender]) {
+		// Metronome phase: finger wags
+		scene.showEffect('pointer', {
+			x: attacker.x + 30, y: attacker.y + 30, z: attacker.z,
+			scale: 0.4, opacity: 1,
+		}, {
+			x: attacker.x + 40, y: attacker.y + 35,
+			scale: 0.5, xscale: 0.3, yscale: 0.6, opacity: 1, time: 200,
+		}, 'decel', 'fade');
+		scene.showEffect('pointer', {
+			x: attacker.x + 40, y: attacker.y + 35, z: attacker.z,
+			scale: 0.5, xscale: 0.3, yscale: 0.6, opacity: 1, time: 200,
+		}, {
+			x: attacker.x + 30, y: attacker.y + 30,
+			scale: 0.4, xscale: 0.4, yscale: 0.4, opacity: 0, time: 400,
+		}, 'decel');
+
+		// Christmas sparkles scatter around attacker
+		scene.showEffect('shine', {
+			x: attacker.x - 10, y: attacker.y + 10, z: attacker.z,
+			scale: 0.3, opacity: 0.9, time: 100,
+		}, {opacity: 0, time: 500}, 'decel');
+		scene.showEffect('shine', {
+			x: attacker.x + 20, y: attacker.y + 5, z: attacker.z,
+			scale: 0.3, opacity: 0.9, time: 250,
+		}, {opacity: 0, time: 650}, 'decel');
+		scene.showEffect('shine', {
+			x: attacker.x + 5, y: attacker.y + 25, z: attacker.z,
+			scale: 0.25, opacity: 0.9, time: 350,
+		}, {opacity: 0, time: 750}, 'decel');
+
+		// Present phase: iceball arcs to defender
+		scene.showEffect('iceball', {
+			x: attacker.x, y: attacker.y, z: attacker.z,
+			scale: 1, opacity: 0.3, time: 400,
+		}, {
+			x: defender.x, y: defender.y, z: defender.z,
+			scale: 1, opacity: 0.7, time: 900,
+		}, 'linear', 'explode');
+
+		// Sparkle burst on impact
+		scene.showEffect('shine', {
+			x: defender.x, y: defender.y + 10, z: defender.z,
+			scale: 0.2, opacity: 0, time: 880,
+		}, {scale: 0.7, opacity: 1, time: 1000}, 'accel', 'fade');
+		scene.showEffect('shine', {
+			x: defender.x + 20, y: defender.y - 10, z: defender.z,
+			scale: 0.25, opacity: 0, time: 920,
+		}, {opacity: 0.8, time: 1100}, 'decel', 'fade');
+		scene.showEffect('shine', {
+			x: defender.x - 15, y: defender.y + 5, z: defender.z,
+			scale: 0.2, opacity: 0, time: 950,
+		}, {opacity: 0.7, time: 1150}, 'decel', 'fade');
+	},
+};
