@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Pokemon Showdown Move Animations
  *
  * Licensing note: PS's client has complicated licensing:
@@ -969,6 +969,56 @@ export const BattleMoveAnims: AnimTable = {
 	mistyterrain: {
 		anim(scene, [attacker]) {
 			scene.backgroundEffect('#FF99FF', 1000, 0.3);
+			BattleOtherAnims.dance.anim(scene, [attacker]);
+		},
+	},
+	noxiousterrain: {
+		anim(scene, [attacker]) {
+			scene.backgroundEffect('#9932CC', 1000, 0.35);
+			scene.showEffect('poisonwisp', {
+				x: attacker.x - 50,
+				y: attacker.y,
+				z: attacker.z,
+				scale: 0.4,
+				opacity: 0.8,
+			}, {
+				x: attacker.x - 30,
+				y: attacker.y + 20,
+				z: attacker.z,
+				scale: 0.2,
+				opacity: 0,
+				time: 600,
+			}, 'accel', 'fade');
+			scene.showEffect('poisonwisp', {
+				x: attacker.x + 50,
+				y: attacker.y,
+				z: attacker.z,
+				scale: 0.4,
+				opacity: 0.8,
+				time: 150,
+			}, {
+				x: attacker.x + 30,
+				y: attacker.y + 20,
+				z: attacker.z,
+				scale: 0.2,
+				opacity: 0,
+				time: 750,
+			}, 'accel', 'fade');
+			scene.showEffect('poisonwisp', {
+				x: attacker.x,
+				y: attacker.y - 10,
+				z: attacker.z,
+				scale: 0.5,
+				opacity: 0.9,
+				time: 300,
+			}, {
+				x: attacker.x,
+				y: attacker.y + 30,
+				z: attacker.z,
+				scale: 0.3,
+				opacity: 0,
+				time: 900,
+			}, 'accel', 'fade');
 			BattleOtherAnims.dance.anim(scene, [attacker]);
 		},
 	},
@@ -36196,5 +36246,55 @@ BattleMoveAnims['merrychristmas'] = {
 			x: defender.x - 15, y: defender.y + 5, z: defender.z,
 			scale: 0.2, opacity: 0, time: 950,
 		}, {opacity: 0.7, time: 1150}, 'decel', 'fade');
+	},
+};
+BattleMoveAnims['strongwinds'] = {
+	anim(scene, [attacker]) {
+		scene.backgroundEffect('#AADDFF', 1000, 0.35);
+		scene.showEffect('wisp', {
+			x: attacker.x - 60,
+			y: attacker.y,
+			z: attacker.z,
+			scale: 0.5,
+			opacity: 0.7,
+		}, {
+			x: attacker.x + 80,
+			y: attacker.y + 10,
+			z: attacker.z,
+			scale: 0.3,
+			opacity: 0,
+			time: 600,
+		}, 'accel', 'fade');
+		scene.showEffect('wisp', {
+			x: attacker.x - 40,
+			y: attacker.y - 15,
+			z: attacker.z,
+			scale: 0.4,
+			opacity: 0.6,
+			time: 150,
+		}, {
+			x: attacker.x + 60,
+			y: attacker.y - 5,
+			z: attacker.z,
+			scale: 0.2,
+			opacity: 0,
+			time: 750,
+		}, 'accel', 'fade');
+		scene.showEffect('wisp', {
+			x: attacker.x - 50,
+			y: attacker.y + 10,
+			z: attacker.z,
+			scale: 0.45,
+			opacity: 0.8,
+			time: 300,
+		}, {
+			x: attacker.x + 70,
+			y: attacker.y + 15,
+			z: attacker.z,
+			scale: 0.25,
+			opacity: 0,
+			time: 900,
+		}, 'accel', 'fade');
+		BattleOtherAnims.dance.anim(scene, [attacker]);
 	},
 };
