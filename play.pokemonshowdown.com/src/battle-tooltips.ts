@@ -1555,6 +1555,8 @@ class BattleTooltips {
 				moveType = 'Fairy';
 			} else if (this.battle.hasPseudoWeather('Psychic Terrain')) {
 				moveType = 'Psychic';
+			} else if (this.battle.hasPseudoWeather('Noxious Terrain')) {
+				moveType = 'Poison';
 			}
 		}
 		if (move.id === 'terablast' && pokemon.terastallized) {
@@ -1897,7 +1899,8 @@ class BattleTooltips {
 				this.battle.hasPseudoWeather('Electric Terrain') ||
 				this.battle.hasPseudoWeather('Grassy Terrain') ||
 				this.battle.hasPseudoWeather('Misty Terrain') ||
-				this.battle.hasPseudoWeather('Psychic Terrain')
+				this.battle.hasPseudoWeather('Psychic Terrain') ||
+				this.battle.hasPseudoWeather('Noxious Terrain')
 			) {
 				value.modify(2, 'Terrain Pulse boost');
 			}
@@ -2092,6 +2095,12 @@ class BattleTooltips {
 					} else {
 						value.modify(1.5, 'Steely Spirit');
 					}
+				} else if (allyAbility === 'Desert Swarm' && moveType === 'Bug') {
+					if (this.battle.weather === 'sandstorm') {
+						value.modify(2, 'Desert Swarm');
+					} else {
+						value.modify(1.5, 'Desert Swarm');
+					}
 				}
 			}
 			for (const foe of pokemon.side.foe.active) {
@@ -2116,7 +2125,8 @@ class BattleTooltips {
 		// Terrain
 		if ((this.battle.hasPseudoWeather('Electric Terrain') && moveType === 'Electric') ||
 			(this.battle.hasPseudoWeather('Grassy Terrain') && moveType === 'Grass') ||
-			(this.battle.hasPseudoWeather('Psychic Terrain') && moveType === 'Psychic')) {
+			(this.battle.hasPseudoWeather('Psychic Terrain') && moveType === 'Psychic') ||
+			(this.battle.hasPseudoWeather('Noxious Terrain') && moveType === 'Poison')) {
 			if (pokemon.isGrounded(serverPokemon)) {
 				value.modify(this.battle.gen > 7 ? 1.3 : 1.5, 'Terrain boost');
 			}
@@ -2168,7 +2178,8 @@ class BattleTooltips {
 			!this.battle.hasPseudoWeather('Electric Terrain') &&
 			!this.battle.hasPseudoWeather('Grassy Terrain') &&
 			!this.battle.hasPseudoWeather('Misty Terrain') &&
-			!this.battle.hasPseudoWeather('Psychic Terrain')
+			!this.battle.hasPseudoWeather('Psychic Terrain') &&
+			!this.battle.hasPseudoWeather('Noxious Terrain')
 		) {
 			value.set(0, 'no Terrain');
 		}

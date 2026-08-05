@@ -976,7 +976,7 @@ export class BattleScene implements BattleSceneStub {
 		for (const pseudoWeatherData of this.battle.pseudoWeather) {
 			terrain = toID(pseudoWeatherData[0]);
 		}
-		if (weather === 'desolateland' || weather === 'primordialsea' || weather === 'deltastream') {
+		if (weather === 'desolateland' || weather === 'primordialsea') {
 			isIntense = true;
 		}
 

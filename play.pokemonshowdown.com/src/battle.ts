@@ -1421,7 +1421,7 @@ export class Battle {
 			return;
 		}
 		if (weather) {
-			let isExtremeWeather = (weather === 'deltastream' || weather === 'desolateland' || weather === 'primordialsea');
+			let isExtremeWeather = (weather === 'desolateland' || weather === 'primordialsea');
 			if (poke) {
 				if (ability) {
 					this.activateAbility(poke, ability.name);

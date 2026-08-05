@@ -454,6 +454,10 @@ License: GPLv2
 	background: #EEAACC url(../fx/weather-mistyterrain.png) no-repeat scroll left top;
 	color: #551144;
 }
+.noxiousterrainweather {
+	background: #AACCAA url(../fx/weather-gravity.png) no-repeat scroll left top;
+	color: #224422;
+}
 .electricterrainweather {
 	background: #EEEEAA url(../fx/weather-electricterrain.png) no-repeat scroll left top;
 	color: #444411;

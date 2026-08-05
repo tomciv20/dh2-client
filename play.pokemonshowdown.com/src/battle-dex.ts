@@ -169,6 +169,13 @@ interface TeambuilderSpriteData {
 	shiny?: boolean;
 }
 
+// Species with a custombase-mod sprite but no official art to protect. Their
+// isNonstandard/exists classification hasn't made it into the compiled client
+// dex data yet, so getSpriteMod's overrideStandard gating wrongly treats them
+// as standard Pokemon and skips the mod-sprite fallback search. Forcing
+// 'custombase' directly here sidesteps that until the client data is rebuilt.
+const FORCE_CUSTOMBASE_SPRITES: ID[] = ['castformsandy', 'moandkrill'] as ID[];
+
 const Dex = new class implements ModdedDex {
 	readonly gen = 9;
 	readonly modid = 'gen9' as ID;
@@ -536,8 +543,12 @@ const Dex = new class implements ModdedDex {
 		let resourcePrefix = Dex.resourcePrefix;
 		let spriteDir = 'sprites/';
 		let hasCustomSprite = false;
-		let modSpriteId = toID(modSpecies.spriteid);		
-		options.mod = this.getSpriteMod(options.mod, modSpriteId, isFront ? 'front' : 'back', modSpecies.exists && modSpecies.isNonstandard !== 'Custom');
+		let modSpriteId = toID(modSpecies.spriteid);
+		if (FORCE_CUSTOMBASE_SPRITES.includes(modSpriteId) && !options.mod) {
+			options.mod = 'custombase';
+		} else {
+			options.mod = this.getSpriteMod(options.mod, modSpriteId, isFront ? 'front' : 'back', modSpecies.exists && modSpecies.isNonstandard !== 'Custom');
+		}
 		if (options.mod) {
 			resourcePrefix = (options.mod === 'custombase' ? 'data/mods/' : Dex.modResourcePrefix);
 			spriteDir = `${options.mod}/sprites/`;
@@ -807,7 +818,11 @@ const Dex = new class implements ModdedDex {
 		let fainted = ((pokemon as Pokemon | ServerPokemon)?.fainted ? `;opacity:.3;filter:grayscale(100%) brightness(.5)` : ``);
 		Dex.species.get(id);
 		let species = window.BattlePokedexAltForms && window.BattlePokedexAltForms[id] ? window.BattlePokedexAltForms[id] : Dex.species.get(id);
-		mod = this.getSpriteMod(mod, id, 'icons', species.exists !== false && species.isNonstandard !== 'Custom');
+		if (FORCE_CUSTOMBASE_SPRITES.includes(id)) {
+			mod = 'custombase';
+		} else {
+			mod = this.getSpriteMod(mod, id, 'icons', species.exists !== false && species.isNonstandard !== 'Custom');
+		}
 		if (mod) return `background:transparent url(${mod === 'custombase' ? 'data/mods/' : this.modResourcePrefix}${mod}/sprites/icons/${id}.png) no-repeat scroll -0px -0px${fainted}`;
 		return `background:transparent url(${Dex.resourcePrefix}sprites/pokemonicons-sheet.png?v16) no-repeat scroll -${left}px -${top}px${fainted}`;
 
@@ -821,7 +836,11 @@ const Dex = new class implements ModdedDex {
 			spriteid = species.spriteid || toID(pokemon.species);
 		}
 		if (mod && window.ModConfig[mod].spriteGen) gen = window.ModConfig[mod].spriteGen;
-		mod = this.getSpriteMod(mod, id, 'front', species.exists !== false && species.isNonstandard !== 'Custom');
+		if (FORCE_CUSTOMBASE_SPRITES.includes(id)) {
+			mod = 'custombase';
+		} else {
+			mod = this.getSpriteMod(mod, id, 'front', species.exists !== false && species.isNonstandard !== 'Custom');
+		}
 		if (mod) {
 			return {
 				spriteDir: `${mod}/sprites/front`,
