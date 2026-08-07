@@ -450,6 +450,10 @@ License: GPLv2
 	background: #AAAAAA url(../fx/weather-strongwind.png) no-repeat scroll left top;
 	color: #666666;
 }
+.darknessweather {
+	background: #241E3D url(../fx/weather-darkness.png) no-repeat scroll left top;
+	color: #DDDDEE;
+}
 .mistyterrainweather {
 	background: #EEAACC url(../fx/weather-mistyterrain.png) no-repeat scroll left top;
 	color: #551144;

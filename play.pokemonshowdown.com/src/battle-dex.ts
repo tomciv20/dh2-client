@@ -174,7 +174,7 @@ interface TeambuilderSpriteData {
 // dex data yet, so getSpriteMod's overrideStandard gating wrongly treats them
 // as standard Pokemon and skips the mod-sprite fallback search. Forcing
 // 'custombase' directly here sidesteps that until the client data is rebuilt.
-const FORCE_CUSTOMBASE_SPRITES: ID[] = ['castformsandy', 'moandkrill'] as ID[];
+const FORCE_CUSTOMBASE_SPRITES: ID[] = ['castformsandy', 'castformwindy', 'castformdark', 'moandkrill'] as ID[];
 
 const Dex = new class implements ModdedDex {
 	readonly gen = 9;

@@ -28,8 +28,9 @@ class ModifiableValue {
 		this.itemName = Dex.items.get(serverPokemon.item).name;
 		const ability = serverPokemon.ability || pokemon?.ability || serverPokemon.baseAbility;
 		this.abilityName = Dex.abilities.get(ability).name;
-		this.weatherName = battle.weather === 'snow' ? 'Snow' : Dex.moves.get(battle.weather).exists ?
-			Dex.moves.get(battle.weather).name : Dex.abilities.get(battle.weather).name;
+		this.weatherName = battle.weather === 'snow' ? 'Snow' : battle.weather === 'darkness' ? 'Darkness' :
+			Dex.moves.get(battle.weather).exists ?
+				Dex.moves.get(battle.weather).name : Dex.abilities.get(battle.weather).name;
 	}
 	reset(value = 0, isAccuracy?: boolean) {
 		this.value = value;
@@ -1522,6 +1523,9 @@ class BattleTooltips {
 			case 'deltastream':
 				moveType = 'Flying';
 				break;
+			case 'darkness':
+				moveType = 'Dark';
+				break;
 			}
 		}
 		if (move.id === 'naturesmadness') {
@@ -1543,6 +1547,9 @@ class BattleTooltips {
 				break;
 			case 'deltastream':
 				moveType = 'Flying';
+				break;
+			case 'darkness':
+				moveType = 'Dark';
 				break;
 			}
 		}
