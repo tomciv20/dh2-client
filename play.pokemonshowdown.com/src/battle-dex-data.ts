@@ -1517,6 +1517,7 @@ class Species implements Effect {
 		this.spriteid = baseId + this.formeid;
 		if (this.spriteid.slice(-5) === 'totem') this.spriteid = this.spriteid.slice(0, -5);
 		if (this.spriteid === 'greninja-bond') this.spriteid = 'greninja';
+		if (['castform-sandy', 'castform-windy', 'castform-dark'].includes(this.spriteid)) this.spriteid = 'castform';
 		if (this.spriteid.slice(-1) === '-') this.spriteid = this.spriteid.slice(0, -1);
 		this.baseForme = data.baseForme || '';
 

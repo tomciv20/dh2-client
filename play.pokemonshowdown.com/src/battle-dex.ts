@@ -174,7 +174,7 @@ interface TeambuilderSpriteData {
 // dex data yet, so getSpriteMod's overrideStandard gating wrongly treats them
 // as standard Pokemon and skips the mod-sprite fallback search. Forcing
 // 'custombase' directly here sidesteps that until the client data is rebuilt.
-const FORCE_CUSTOMBASE_SPRITES: ID[] = ['castformsandy', 'castformwindy', 'castformdark', 'moandkrill'] as ID[];
+const FORCE_CUSTOMBASE_SPRITES: ID[] = ['moandkrill'] as ID[];
 
 const Dex = new class implements ModdedDex {
 	readonly gen = 9;
@@ -519,7 +519,7 @@ const Dex = new class implements ModdedDex {
 		dynamax?: boolean,
 	} = {gen: 6, mod: ''}) {
 		let mechanicsGen = options.gen || 6;
-		if (options.mod && window.ModConfig[options.mod].spriteGen) mechanicsGen = window.ModConfig[options.mod].spriteGen;
+		if (options.mod && window.ModConfig[options.mod]?.spriteGen) mechanicsGen = window.ModConfig[options.mod].spriteGen;
 		let isDynamax = !!options.dynamax;
 		if (pokemon instanceof Pokemon) {
 			if (pokemon.volatiles.transform) {
@@ -755,7 +755,7 @@ const Dex = new class implements ModdedDex {
 			if (!window.ModSprites[modSpriteId] && !window.BattlePokemonSprites[modSpriteId] && pokemon !== 'substitute') {
 				spriteData = Dex.getSpriteData('substitute', spriteData.isFrontSprite, {
 					gen: options.gen,
-					mod: options.mod,
+					mod: options.mod === 'custombase' ? '' : options.mod,
 				});
 			}
 		}
@@ -835,7 +835,7 @@ const Dex = new class implements ModdedDex {
 		if (pokemon.species && !spriteid) {
 			spriteid = species.spriteid || toID(pokemon.species);
 		}
-		if (mod && window.ModConfig[mod].spriteGen) gen = window.ModConfig[mod].spriteGen;
+		if (mod && window.ModConfig[mod]?.spriteGen) gen = window.ModConfig[mod].spriteGen;
 		if (FORCE_CUSTOMBASE_SPRITES.includes(id)) {
 			mod = 'custombase';
 		} else {
