@@ -154,7 +154,7 @@
 				}
 				this.ignoreEVLimits = (this.curTeam.gen < 3 ||
 					((this.curTeam.format.includes('hackmons') || this.curTeam.format.endsWith('bh')) && this.curTeam.gen !== 6) ||
-					this.curTeam.format.includes('metronomebattle') || (this.curTeam.mod && ModConfig[this.curTeam.mod].ignoreEVLimits));
+					(this.curTeam.mod && ModConfig[this.curTeam.mod].ignoreEVLimits));
 					this.dex = this.curTeam.mod ? Dex.mod(this.curTeam.mod) : Dex; // keeping just in case for now
 					this.curTeam.dex = this.curTeam.mod ? Dex.mod(this.curTeam.mod) : Dex;
 				if (this.curSet) {
