@@ -444,25 +444,14 @@ function buildTeambuilderTables() {
 			const tier = (() => {
 				if (isMetBattle) {
 					let tier = species.tier;
-					if (species.isNonstandard) {
-						if (species.isNonstandard === 'Past') {
-							tier = Dex.mod('gen7').species.get(species.name).tier;
-						} else {
-							tier = 'OU';
-						}
+					// CAP/Mega/Gmax/etc are actually illegal in this format's ruleset (Obtainable),
+					// and DH2's own `tier` field (not BST/typing guesses) already reflects real legality.
+					if (species.isNonstandard) tier = 'Illegal';
+					if (!tier) tier = 'Illegal';
+					if (tier !== 'Illegal') {
+						const format = Dex.formats.get(gen + 'metronomebattle');
+						if (Dex.formats.getRuleTable(format).isBannedSpecies(species)) tier = 'Illegal';
 					}
-					if (species.isNonstandard === 'Gigantamax') tier = '(Uber)';
-					if (species.tier === 'CAP LC') tier = 'LC';
-					if (species.tier === 'CAP NFE') tier = 'NFE';
-					if (species.tier === 'CAP') tier = 'OU';
-					const format = Dex.formats.get(gen + 'metronomebattle');
-					let bst = 0;
-					for (const stat of Object.values(species.baseStats)) {
-						bst += stat;
-					}
-					if (bst > 625) tier = 'Illegal';
-					if (Dex.formats.getRuleTable(format).isBannedSpecies(species)) tier = 'Illegal';
-					if (species.types.includes('Steel')) tier = 'Illegal';
 					return tier;
 				}
 				if (isNFE) {
@@ -700,7 +689,12 @@ function buildTeambuilderTables() {
 			if (item.gen > genNum) {
 				continue;
 			}
-			if (item.isNonstandard && !isMetBattle) {
+			if (isMetBattle) {
+				const banlist = Dex.formats.getRuleTable(Dex.formats.get(gen + 'metronomebattle'));
+				const explicitlyUnbanned = banlist.check('item:' + item.id) === '';
+				if (item.isNonstandard && !explicitlyUnbanned) continue;
+				if (banlist.isBanned('item:' + item.id)) continue;
+			} else if (item.isNonstandard) {
 				if (isNatDex) {
 					let curItem = item;
 					let curGen = genNum;
@@ -712,10 +706,6 @@ function buildTeambuilderTables() {
 				} else if (genNum !== 2) {
 					continue;
 				}
-			}
-			if (isMetBattle) {
-				const banlist = Dex.formats.getRuleTable(Dex.formats.get(gen + 'metronomebattle'));
-				if (banlist.isBanned('item:' + item.id)) continue;
 			}
 			if (item.itemUser || item.megaStone || id === 'boosterenergy') {
 				specificItems.push(id);
